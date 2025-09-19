@@ -1,0 +1,88 @@
+body { font-family: 'Space Grotesk', sans-serif; background-color: #0c1425; color: #e2e8f0; }
+.mono-font { font-family: 'IBM Plex Mono', monospace; }
+.card { background-color: #16213a; border: 1px solid #334155; border-radius: 0.75rem; transition: all 0.3s ease; }
+.card:hover { box-shadow: 0 0 25px rgba(56, 189, 248, 0.1); border-color: #38bdf8; }
+.input-field, .select-field { background-color: #0f172a; border: 1px solid #475569; color: #e2e8f0; border-radius: 0.375rem; padding: 0.75rem; width: 100%; font-size: 1rem; transition: all 0.2s ease-in-out; }
+.input-field:focus, .select-field:focus { outline: none; border-color: #38bdf8; box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.4); }
+.btn-primary { background: linear-gradient(90deg, #38bdf8, #3b82f6); color: #ffffff; font-weight: 700; padding: 1rem 1.5rem; border-radius: 0.5rem; cursor: pointer; transition: all 0.3s; width: 100%; font-size: 1.125rem; border: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(56, 189, 248, 0.2); }
+.btn-primary:disabled { background: #334155; cursor: not-allowed; }
+.btn-secondary { background-color: #334155; color: #c8d3e3; font-weight: 600; padding: 0.5rem 1rem; border-radius: 0.375rem; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; }
+.btn-secondary:hover { background-color: #475569; }
+.level-bad { color: #f87171;} .level-good { color: #fbbf24;} .level-excellent { color: #4ade80;}
+.nav-btn { background-color: #1e293b; color: #94a3b8; padding: 0.75rem 1.5rem; border-radius: 999px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; }
+.nav-btn.active { background: linear-gradient(90deg, #38bdf8, #3b82f6); color: white; }
+.fade-in { animation: fadeIn 0.5s ease-in-out; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.tag { background-color: #334155; color: #c8d3e3; padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.8rem; margin: 0.25rem; display: inline-block; }
+.modal-backdrop { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 50; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+.modal-backdrop.active { opacity: 1; visibility: visible; }
+.modal-content { background-color: #16213a; border: 1px solid #334155; padding: 2rem; border-radius: 1rem; width: 90%; max-width: 600px; transform: scale(0.95); transition: all 0.3s ease; }
+.modal-backdrop.active .modal-content { transform: scale(1); }
+.thumbnail-container { position: relative; width: 100%; padding-top: 56.25%; border-radius: 0.5rem; overflow: hidden; background-color: #0f172a; }
+.thumbnail-container img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+.checklist-item { display: flex; align-items: flex-start; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid #334155; }
+.checklist-item:last-child { border-bottom: none; }
+.checklist-icon { font-size: 1.25rem; padding-top: 0.25rem; }
+.icon-success { color: #4ade80; } .icon-warning { color: #fbbf24; } .icon-danger { color: #f87171; }
+
+/* START: CSS cho Toast Notification */
+#toast-container { position: fixed; bottom: 1.25rem; right: 1.25rem; z-index: 100; display: flex; flex-direction: column; gap: 0.5rem; }
+.toast { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem; border-radius: 0.5rem; color: white; font-weight: 600; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); transform: translateX(100%); opacity: 0; animation: toast-in 0.5s forwards, toast-out 0.5s 4.5s forwards; }
+.toast-success { background: linear-gradient(90deg, #10b981, #14b8a6); }
+.toast-error { background: linear-gradient(90deg, #ef4444, #f87171); }
+.toast-info { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+@keyframes toast-in { to { transform: translateX(0); opacity: 1; } }
+@keyframes toast-out { to { transform: translateX(100%); opacity: 0; } }
+/* END: CSS cho Toast Notification */
+
+/* START: CSS cho Accordion Cài Đặt */
+.accordion-header {
+    background-color: #1e293b;
+    padding: 0.75rem 1rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+.accordion-header:hover {
+    background-color: #334155;
+}
+.accordion-icon {
+    transition: transform 0.3s ease-in-out;
+}
+.accordion-header.active .accordion-icon {
+    transform: rotate(180deg);
+}
+.accordion-content {
+    background-color: #0f172a;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+    border-radius: 0 0 0.375rem 0.375rem;
+}
+.setting-item {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
+    gap: 1rem;
+}
+.setting-item label {
+    justify-self: start;
+}
+/* END: CSS cho Accordion Cài Đặt */
+
+/* START: CSS cho Progress Bar */
+#progress-bar {
+    transition: width 0.5s ease-in-out;
+}
+/* END: CSS cho Progress Bar */
+
+/* START: CSS cho các nút tạo prompt */
+.prompt-buttons-container {
+    display: flex;
+    gap: 0.75rem; /* 12px */
+    justify-content: space-between;
+}
+/* END: CSS cho các nút tạo prompt */

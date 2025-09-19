@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bàn Làm Việc Chiến Lược YouTube v21.1 (UI & Autosave Update)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="antialiased">
+    <div class="container mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-white tracking-tighter">Bàn Làm Việc Chiến Lược YouTube</h1>
+            <p class="text-slate-400 mt-2 mono-font">Coder: Tran Gia Khiem | Ver 21.1 | Lastest update 19/09/2025</p>
+        </header>
+
+        <nav class="flex justify-center space-x-2 md:space-x-4 mb-8">
+            <button id="nav-research" class="nav-btn active" onclick="showTool('researchTool')"><i class="fa-solid fa-flask"></i><span class="hidden md:inline">Phân Tích & Sáng Tạo</span></button>
+            <button id="nav-optimizer" class="nav-btn" onclick="showTool('optimizerTool')"><i class="fa-solid fa-rocket"></i><span class="hidden md:inline">Tối Ưu Video</span></button>
+        </nav>
+
+        <div id="researchTool">
+             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 space-y-8">
+                    <section class="card p-6">
+                        <div class="space-y-6">
+                            <div>
+                                <label for="videoUrl" class="font-semibold mb-2 block text-lg">Dán URL Video đối thủ:</label>
+                                <div class="relative">
+                                    <i class="fa-solid fa-link absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                    <input type="text" id="videoUrl" class="input-field mono-font pl-10" placeholder="https://www.youtube.com/watch?v=...">
+                                </div>
+                            </div>
+                            <div id="preAnalysis" class="hidden fade-in pt-6 border-t border-slate-700"></div>
+                            
+                            <div class="pt-6 border-t border-slate-700">
+                                <button id="runTrendAnalysisBtn" onclick="runTrendAnalysis()" class="btn-primary" disabled>
+                                    <i class="fa-solid fa-bolt"></i> CHẤM ĐIỂM TREND TỰ ĐỘNG
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="scriptWriterSection" class="card p-6 hidden fade-in">
+                        <div class="space-y-6">
+                            <div>
+                                <h3 class="font-bold text-lg text-sky-400 mb-2 flex items-center gap-2"><i class="fa-solid fa-sitemap"></i> Flow: Kiến Trúc Sư & Người Viết</h3>
+                                <p class="text-sm text-slate-400">Quy trình thông minh: AI tự phân tích chuyên gia, tạo dàn ý, sau đó viết lại kịch bản với vai trò và văn phong phù hợp nhất.</p>
+                            </div>
+                            
+                            <div class="space-y-3 pt-4 border-t border-slate-700">
+                                <h4 class="font-semibold text-white">Lựa chọn Ngôn ngữ (Tự động lưu):</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                   <div>
+                                       <label for="transcript-source-language-select" class="font-semibold block text-sm mb-1">Ngôn ngữ Input (Gốc):</label>
+                                       <select id="transcript-source-language-select" class="select-field mono-font" title="Ngôn ngữ của transcript gốc"></select>
+                                   </div>
+                                   <div>
+                                       <label for="output-language-select" class="font-semibold block text-sm mb-1">Ngôn ngữ Output (Đích):</label>
+                                       <select id="output-language-select" class="select-field mono-font" title="Ngôn ngữ kịch bản muốn viết"></select>
+                                   </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4 p-4 border border-slate-700 rounded-lg">
+                                <div>
+                                    <label for="videoTranscript" class="font-semibold block text-sm">1. Dán Toàn Bộ Transcript Của Đối Thủ:</label>
+                                    <div class="relative mt-2">
+                                        <textarea id="videoTranscript" class="input-field mono-font h-24 pr-10" placeholder="Dán nội dung phụ đề..." oninput="handleTranscriptInput()"></textarea>
+                                        <button id="pasteTranscriptBtn" class="absolute top-2 right-2 btn-secondary !p-2 h-8 w-8" title="Dán từ clipboard">
+                                            <i class="fa-solid fa-paste"></i>
+                                        </button>
+                                    </div>
+                                    <p id="transcript-word-count" class="text-right text-sm text-slate-400 mono-font mt-1">0 từ</p>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                   <div>
+                                       <label for="scriptParts" class="font-semibold block text-sm">2. Chia thành (số phần):</label>
+                                       <input type="number" id="scriptParts" class="input-field mono-font" placeholder="Tự động...">
+                                   </div>
+                                   <div class="flex flex-col">
+                                       <button id="architectBtn" onclick="runArchitectAI()" class="btn-primary self-end">
+                                           <i class="fa-solid fa-brain"></i> BƯỚC 1: TẠO DÀN Ý
+                                       </button>
+                                   </div>
+                                </div>
+                                <div id="translation-output-container" class="hidden fade-in pt-4 border-t border-slate-700 space-y-2">
+                                    <button onclick="toggleTranslationView()" id="view-translation-btn" class="btn-secondary w-full">
+                                        <i class="fa-solid fa-language"></i> Xem Bản Dịch
+                                    </button>
+                                    <div id="translation-output" class="hidden p-3 bg-slate-900 rounded-lg whitespace-pre-wrap mono-font text-xs max-h-48 overflow-y-auto"></div>
+                                </div>
+                            </div>
+
+                            <div id="step2-container" class="hidden fade-in space-y-4 p-4 border border-slate-700 rounded-lg">
+                                <div>
+                                    <div class="flex items-center justify-between">
+                                        <h4 class="font-semibold text-white">Dàn Ý Chi Tiết & Phân Tích Chuyên Gia</h4>
+                                        <button class="btn-secondary !p-2 h-8 w-8" title="Chỉnh sửa dàn ý (sắp có)">
+                                            <i class="fa-solid fa-pencil text-slate-400"></i>
+                                        </button>
+                                    </div>
+                                    <div id="blueprintOutput" class="mt-2 p-3 bg-slate-900 rounded-lg whitespace-pre-wrap mono-font text-xs max-h-48 overflow-y-auto"></div>
+                                </div>
+                                
+                                <div class="space-y-3 pt-4 border-t border-slate-700">
+                                    <div class="flex justify-between items-center">
+                                        <h4 class="font-semibold text-sm text-white">AI Đề xuất Role & Style:</h4>
+                                        <button id="editRoleStyleBtn" class="btn-secondary !p-2.5 h-10 w-10" title="Chỉnh sửa Role/Style">
+                                            <i class="fa-solid fa-pencil"></i>
+                                        </button>
+                                    </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        <div>
+                                            <label for="roleOutput" class="font-semibold text-xs text-slate-300">Role (Vai trò):</label>
+                                            <input type="text" id="roleOutput" class="input-field mono-font text-sm" placeholder="AI đề xuất vai trò..." disabled>
+                                        </div>
+                                        <div>
+                                            <label for="styleOutput" class="font-semibold text-xs text-slate-300">Style (Văn phong):</label>
+                                            <input type="text" id="styleOutput" class="input-field mono-font text-sm" placeholder="AI đề xuất văn phong..." disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="space-y-2">
+                                    <label for="creativitySlider" id="creativityLabel" class="font-semibold text-sm text-white">Tỷ lệ Nội dung: Giữ lại 80% / Viết mới 20%</label>
+                                    <input type="range" id="creativitySlider" min="0" max="100" value="20" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer">
+                                </div>
+                                
+                                <div class="flex flex-col md:flex-row gap-4">
+                                    <button id="writerBtn" onclick="runWriterAI()" class="btn-primary w-full">
+                                        <i class="fa-solid fa-pencil-alt"></i> BƯỚC 2: VIẾT KỊCH BẢN (<span id="parts-count">0</span> PHẦN)
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="script-writing-output" class="hidden fade-in space-y-4 pt-4 border-t border-slate-700">
+                                <div class="flex justify-between items-center mb-2">
+                                    <h4 class="font-semibold text-white">Các Phần Kịch Bản</h4>
+                                    <span id="status-indicator" class="text-sm font-semibold text-amber-400"></span>
+                                </div>
+                                <div id="progress-bar-container" class="w-full bg-slate-700 rounded-full h-2.5 hidden">
+                                    <div id="progress-bar" class="bg-sky-500 h-2.5 rounded-full" style="width: 0%"></div>
+                                </div>
+                                <div id="scriptPartsOutput" class="space-y-4"></div>
+                                
+                                <div id="step3-options" class="hidden flex pt-4">
+                                     <button id="combineBtn" onclick="combineScriptParts()" class="btn-primary w-full bg-green-600 hover:bg-green-700">
+                                        <i class="fa-solid fa-layer-group"></i> GHÉP CÁC PHẦN LẠI
+                                     </button>
+                                </div>
+
+                                <div id="combinedScriptContainer" class="hidden space-y-2 pt-4 border-t border-slate-700">
+                                    <div class="flex justify-between items-center">
+                                        <h4 class="font-semibold text-white">Kết Quả Kịch Bản Hoàn Thiện</h4>
+                                        <span id="final-script-stats" class="text-sm text-slate-400 mono-font"></span>
+                                    </div>
+                                    <div id="finalScriptOutput" class="p-4 bg-slate-900 rounded-lg whitespace-pre-wrap mono-font text-sm max-h-96 overflow-y-auto"></div>
+                                    <div id="finalActions" class="flex flex-col md:flex-row gap-2 mt-4">
+                                        <button onclick="copyFullScript()" id="copyFinalBtn" class="bg-slate-600 text-sm font-bold py-2 px-4 rounded-lg hover:bg-slate-500 w-full">
+                                            <i class="fa-solid fa-copy"></i> Copy Kịch Bản Hoàn Thiện
+                                        </button>
+                                        <button onclick="downloadScriptAsTxt()" id="downloadScriptBtn" class="bg-sky-600 text-sm font-bold py-2 px-4 rounded-lg hover:bg-sky-500 w-full">
+                                           <i class="fa-solid fa-file-arrow-down"></i> Tải File .txt
+                                        </button>
+                                    </div>
+                                    <div id="voice-suggestion-container" class="pt-4 mt-4 border-t border-slate-700 space-y-3">
+                                        <button onclick="generateVoSuggestions()" id="generateVoBtn" class="btn-secondary w-full">
+                                            <i class="fa-solid fa-microphone-lines"></i> Đề xuất Giọng đọc (Voice)
+                                        </button>
+                                        <div id="voiceSuggestionsOutput" class="p-4 bg-slate-900 rounded-lg hidden"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="lg:col-span-1 space-y-8">
+                    <section class="card p-6">
+                        <h3 class="font-bold text-lg text-sky-400 mb-4 flex items-center gap-2"><i class="fa-solid fa-sliders"></i> Cài Đặt Chung</h3>
+                        
+                        <div id="settings-accordion" class="space-y-2">
+                            <div>
+                                <div class="accordion-header">
+                                    <h4 class="font-semibold">Quản lý API Keys & AI Model</h4>
+                                    <i class="fa-solid fa-chevron-down accordion-icon"></i>
+                                </div>
+                                <div class="accordion-content">
+                                    <div class="space-y-4 p-4">
+                                        <div class="setting-item-col">
+                                            <label for="youtube-api-key" class="font-semibold text-sm">YouTube API Key</label>
+                                            <input type="password" id="youtube-api-key" class="input-field mono-font" placeholder="API Key của YouTube Data v3">
+                                        </div>
+                                        <div class="setting-item-col">
+                                            <label for="gemini-api-key" class="font-semibold text-sm">Gemini API Key</label>
+                                            <input type="password" id="gemini-api-key" class="input-field mono-font" placeholder="API Key của Google AI Studio">
+                                        </div>
+                                        <div class="setting-item-col">
+                                            <label for="chatgpt-api-key" class="font-semibold text-sm">OpenAI (ChatGPT) API Key</label>
+                                            <input type="password" id="chatgpt-api-key" class="input-field mono-font" placeholder="API Key của OpenAI">
+                                        </div>
+                                        <hr class="border-slate-600 my-4">
+                                        <div class="setting-item-col">
+                                            <label for="ai-provider-select" class="font-semibold text-sm">Nhà cung cấp AI (Tự động lưu)</label>
+                                            <select id="ai-provider-select" class="select-field mono-font">
+                                                <option value="gemini">Google Gemini</option>
+                                                <option value="chatgpt">OpenAI ChatGPT</option>
+                                            </select>
+                                        </div>
+                                        <div id="gemini-model-select-container" class="setting-item-col">
+                                            <label for="gemini-model-select" class="font-semibold text-sm">Gemini Model (Tự động lưu)</label>
+                                            <select id="gemini-model-select" class="select-field mono-font">
+                                               <option value="gemini-1.5-flash-latest">Gemini 1.5 Flash</option>
+                                               <option value="gemini-1.5-pro-latest">Gemini 1.5 Pro</option>
+                                            </select>
+                                        </div>
+                                        <div id="chatgpt-model-select-container" class="hidden setting-item-col">
+                                            <label for="chatgpt-model-select" class="font-semibold text-sm">ChatGPT Model (Tự động lưu)</label>
+                                            <select id="chatgpt-model-select" class="select-field mono-font">
+                                               <option value="gpt-4o-mini">GPT-4o Mini (Nhanh & Rẻ)</option>
+                                               <option value="gpt-4o">GPT-4o (Mới & Mạnh nhất)</option>
+                                               <option value="gpt-4-turbo">GPT-4 Turbo (Mạnh)</option>
+                                               <option value="gpt-3.5-turbo">GPT-3.5 Turbo (Cơ bản)</option>
+                                            </select>
+                                        </div>
+                                        <div class="pt-2">
+                                             <button onclick="saveApiSettings()" class="w-full btn-secondary">
+                                                <i class="fa-solid fa-save"></i> Lưu API Keys
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="accordion-header">
+                                    <h4 class="font-semibold">Tham Số Tính Toán</h4>
+                                    <i class="fa-solid fa-chevron-down accordion-icon"></i>
+                                </div>
+                                <div class="accordion-content">
+                                    <div class="space-y-4 p-4">
+                                        <div>
+                                            <h4 class="font-semibold text-sm mb-2">Ngưỡng VPH</h4>
+                                            <div class="grid grid-cols-3 gap-2 text-sm text-center">
+                                                <div><div class="font-semibold text-red-400">Báo Động &lt;</div><input type="number" id="setting-vph-bad" class="input-field text-center mono-font"></div>
+                                                <div><div class="font-semibold text-amber-400">Tốt &lt;</div><input type="number" id="setting-vph-good" class="input-field text-center mono-font"></div>
+                                                <div><div class="font-semibold text-green-400">Xuất Sắc</div><span class="block mt-2 font-bold mono-font" id="vph-excellent-display">> 1000</span></div>
+                                            </div>
+                                        </div>
+                                        <div class="pt-4 border-t border-slate-700">
+                                             <h4 class="font-semibold text-sm mb-2">Tốc độ đọc (WPM)</h4>
+                                             <div class="setting-item-col">
+                                                <label for="setting-wpm" class="text-xs text-slate-400 mb-1">Dùng để ước tính thời gian đọc kịch bản.</label>
+                                                <input type="number" id="setting-wpm" class="input-field text-center mono-font">
+                                            </div>
+                                        </div>
+                                        <div class="pt-2">
+                                            <button onclick="saveCalcSettings()" class="w-full btn-secondary">
+                                                <i class="fa-solid fa-save"></i> Lưu Tham Số
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="accordion-header">
+                                    <h4 class="font-semibold">Studio Sản Xuất (Ảnh & Video)</h4>
+                                    <i class="fa-solid fa-chevron-down accordion-icon"></i>
+                                </div>
+                                <div class="accordion-content">
+                                    <div class="space-y-6 p-4">
+                                        <div class="space-y-2">
+                                            <h4 class="font-semibold text-sm text-sky-400">Phong cách Ảnh Minh Họa</h4>
+                                            <div class="setting-item-col">
+                                                <label for="image-style-group" class="font-semibold text-xs">Nhóm Phong cách</label>
+                                                <select id="image-style-group" class="select-field mono-font"></select>
+                                            </div>
+                                             <div class="setting-item-col">
+                                                <label for="image-style-specific" class="font-semibold text-xs">Phong cách Cụ thể</label>
+                                                <select id="image-style-specific" class="select-field mono-font"></select>
+                                            </div>
+                                        </div>
+                                        <hr class="border-slate-600 my-4">
+                                        <div class="space-y-2">
+                                            <h4 class="font-semibold text-sm text-sky-400">Phong cách B-Roll Video</h4>
+                                            <div class="setting-item-col">
+                                                <label for="video-style-group" class="font-semibold text-xs">Nhóm Phong cách</label>
+                                                <select id="video-style-group" class="select-field mono-font"></select>
+                                            </div>
+                                             <div class="setting-item-col">
+                                                <label for="video-style-specific" class="font-semibold text-xs">Phong cách Cụ thể</label>
+                                                <select id="video-style-specific" class="select-field mono-font"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </section>
+
+                    <section id="tagsSection" class="hidden fade-in card p-6">
+                        <h3 class="font-bold text-lg text-sky-400 mb-2 flex items-center gap-2"><i class="fa-solid fa-tags"></i> Tags của Đối Thủ</h3>
+                        <div id="tagsContainer" class="flex flex-wrap mb-4"></div>
+                        <button id="copyTagsBtn" onclick="copyAllTags(this)" class="w-full bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-copy"></i> <span id="copyBtnText">Copy All Tags</span>
+                        </button>
+                    </section>
+                    
+                    <section id="aiSuggestionsSection" class="hidden fade-in card p-6">
+                        <div class="space-y-4">
+                            <h3 class="font-bold text-lg text-sky-400 flex items-center gap-2"><i class="fa-solid fa-lightbulb"></i> Gợi Ý Tối Ưu SEO từ AI</h3>
+                             <p class="text-sm text-slate-400">Dựa trên dữ liệu của đối thủ, AI sẽ đề xuất Tiêu đề, Tags và Mô tả mới giúp bạn tăng khả năng cạnh tranh.</p>
+                            <button onclick="runAiSuggestions()" id="runAiSuggestionsBtn" class="btn-primary w-full">
+                                <i class="fa-solid fa-magic-wand-sparkles"></i> Lấy Gợi Ý Tối Ưu
+                            </button>
+                            <div id="aiSuggestionsOutput" class="pt-4 border-t border-slate-700 space-y-4">
+                                </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <div id="optimizerTool" class="hidden">
+            <section class="card p-6">
+                <div class="space-y-6">
+                    <div>
+                        <label for="optimizerVideoUrl" class="font-semibold mb-2 block text-lg">Dán URL Video cần tối ưu:</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-link absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <input type="text" id="optimizerVideoUrl" class="input-field mono-font pl-10" placeholder="https://www.youtube.com/watch?v=...">
+                        </div>
+                    </div>
+                    <div class="pt-6 border-t border-slate-700">
+                        <button id="runOptimizerBtn" onclick="runOptimizer()" class="btn-primary">
+                            <i class="fa-solid fa-magnifying-glass-chart"></i> PHÂN TÍCH & ĐỀ XUẤT
+                        </button>
+                    </div>
+                </div>
+            </section>
+            <div id="optimizerResults" class="hidden fade-in mt-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="card p-6 space-y-4">
+                         <h3 class="font-bold text-lg text-sky-400 mb-2">Thông Tin Video</h3>
+                         <div id="optimizerVideoInfo"></div>
+                         <h3 class="font-bold text-lg text-sky-400 pt-4 border-t border-slate-700">Nhập Chỉ Số Thủ Công</h3>
+                         <div class="grid grid-cols-2 gap-4">
+                            <div>
+                               <label for="manualCTR" class="font-medium text-sm mb-1 block">CTR (%)</label>
+                               <input type="number" id="manualCTR" class="input-field mono-font" placeholder="ví dụ: 5.5">
+                            </div>
+                            <div>
+                               <label for="manualAVD" class="font-medium text-sm mb-1 block">Thời gian xem TB (HH:MM:SS)</label>
+                               <input type="text" id="manualAVD" class="input-field mono-font" placeholder="ví dụ: 21:47">
+                            </div>
+                         </div>
+                    </div>
+                    <div class="card p-6">
+                        <h3 class="font-bold text-lg text-sky-400 mb-2">Checklist Tối Ưu SEO</h3>
+                        <div id="optimizationChecklist"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="resultModal" class="modal-backdrop" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3 class="font-bold text-xl text-sky-400 mb-4">Kết Quả Phân Tích Trend</h3>
+            <div id="finalResult"></div>
+            <button onclick="closeModal()" class="w-full mt-6 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Đóng</button>
+        </div>
+    </div>
+    
+    <div id="toast-container"></div>
+    
+    <script src="utils.js"></script>
+    <script src="settings.js"></script>
+    <script src="styles.js"></script>
+    <script src="ui-handlers.js"></script>
+    <script src="generative-ai.js"></script>
+    <script src="research-tool.js"></script>
+    <script src="script-writer.js"></script>
+    <script src="optimizer-tool.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

@@ -26,7 +26,7 @@ const supportedLanguages = [
 // === CONFIGURATION ===
 // IDs cho các settings cần load lúc đầu
 const allSettingIds = [
-    'youtube-api-key', 'gemini-api-key', 'chatgpt-api-key', 
+    'youtube-api-key', 'gemini-api-key', 'chatgpt-api-key',
     'ai-provider-select', 'gemini-model-select', 'chatgpt-model-select',
     'setting-vph-bad', 'setting-vph-good', 'setting-wpm',
     'output-language-select', 'transcript-source-language-select'
@@ -41,7 +41,7 @@ const defaultSettings = {
     'gemini-api-key': '',
     'chatgpt-api-key': '',
     'ai-provider-select': 'gemini',
-    'gemini-model-select': 'gemini-1.5-flash-latest',
+    'gemini-model-select': 'gemini-2.0-flash', // <-- MẶC ĐỊNH ĐÃ ĐƯỢC CẬP NHẬT
     'chatgpt-model-select': 'gpt-4o-mini',
     'output-language-select': 'Tiếng Việt',
     'transcript-source-language-select': 'Tiếng Việt',

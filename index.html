@@ -16,7 +16,7 @@
 
         <header class="text-center mb-8">
             <h1 class="text-4xl sm:text-5xl font-extrabold text-white tracking-tighter">Bàn Làm Việc Chiến Lược YouTube</h1>
-            <p class="text-slate-400 mt-2 mono-font">Coder: Tran Gia Khiem | Ver 21.1 | Lastest update 19/09/2025</p>
+            <p class="text-slate-400 mt-2 mono-font">Coder: Tran Gia Khiem | Ver 21.1 | Lastest update 20/09/2025</p>
         </header>
 
         <nav class="flex justify-center space-x-2 md:space-x-4 mb-8">
@@ -214,11 +214,23 @@
                                         </div>
                                         <div id="gemini-model-select-container" class="setting-item-col">
                                             <label for="gemini-model-select" class="font-semibold text-sm">Gemini Model (Tự động lưu)</label>
+                                            
                                             <select id="gemini-model-select" class="select-field mono-font">
-                                               <option value="gemini-1.5-flash-latest">Gemini 1.5 Flash</option>
-                                               <option value="gemini-1.5-pro-latest">Gemini 1.5 Pro</option>
+                                                <option value="gemini-2.0-flash" title="Các tính năng thế hệ mới, tốc độ và khả năng phát trực tuyến theo thời gian thực.">
+                                                    Gemini 2.0 Flash
+                                                </option>
+                                                <option value="gemini-2.0-flash-lite" title="Hiệu quả chi phí và độ trễ thấp">
+                                                    Gemini 2.0 Flash-Lite
+                                                </option>
+                                                <option value="gemini-2.5-flash" title="Hiệu quả chi phí và độ trễ thấp">
+                                                    Gemini 2.5 Flash
+                                                </option>
+                                                <option value="gemini-2.5-flash-lite" title="Mô hình tiết kiệm chi phí nhất, hỗ trợ thông lượng cao">
+                                                    Gemini 2.5 Flash-Lite
+                                                </option>
+                                                <option value="gemini-1.5-flash-latest">Gemini 1.5 Flash</option>
                                             </select>
-                                        </div>
+                                            </div>
                                         <div id="chatgpt-model-select-container" class="hidden setting-item-col">
                                             <label for="chatgpt-model-select" class="font-semibold text-sm">ChatGPT Model (Tự động lưu)</label>
                                             <select id="chatgpt-model-select" class="select-field mono-font">
@@ -230,7 +242,7 @@
                                         </div>
                                         <div class="pt-2">
                                              <button onclick="saveApiSettings()" class="w-full btn-secondary">
-                                                <i class="fa-solid fa-save"></i> Lưu API Keys
+                                                <i class="fa-solid fa-save"></i> Lưu API Keys & AI model
                                             </button>
                                         </div>
                                     </div>
